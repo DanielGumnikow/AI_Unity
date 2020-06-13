@@ -32,6 +32,8 @@ public class EnemyAI : MonoBehaviour
     Player player;                                          // playerscript reference
     RaycastHit hit;                                         // reference to calculated raycast
 
+    
+    
     /*
      * Initializing references to objects, activate statusicon for the leaderzombie, 
      * calculating the closest waypoints for each AI to set up as the first Waypoint of the path.
@@ -55,6 +57,7 @@ public class EnemyAI : MonoBehaviour
         wanderPoint = RandomWanderPoint();
         AvoiddancePrio();
         StartCoroutine(Think()); //call Think() method
+
     }
 
 
@@ -264,7 +267,7 @@ public class EnemyAI : MonoBehaviour
                         control.GetComponent<SwarmControl>().chasingZombies -= 1;
                     }
 
-                    if (Physics.Linecast(transform.position, target.position, out hit, ~(1 << 8)))
+                    if (Physics.Linecast(transform.position, target.position, out hit, (1 << 11) | (1 << 10)))
                     {
                         if (!hit.transform.CompareTag("Player"))
                         {
@@ -368,16 +371,12 @@ public class EnemyAI : MonoBehaviour
 
                     if (dist < distanceThreshold)
                     {
-                        if (Physics.Linecast(transform.position, target.position, out hit, ~(1 << 8)))
+                        if (Physics.Linecast(transform.position, target.position, out hit, (1 << 11) | (1 << 10) ))
                         {
-                            if (hit.transform.CompareTag("Player") && control.GetComponent<SwarmControl>().chasingZombies < 4)
+                            if (hit.transform.CompareTag("Player"))
                             {
                                 aiState = AIState.chasing;
                                 animator.SetBool("Chasing", true);
-                            }
-                            else
-                            {
-                                Wander();
                             }
                         }
                     }
